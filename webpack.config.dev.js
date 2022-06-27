@@ -2,9 +2,6 @@ const { resolve } = require("path");
 const path = require("path");
 const MiniCSSExtractPlugin = require("mini-css-extract-plugin");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
-const CSSMinimizerPlugin = require("css-minimizer-webpack-plugin");
-const TerserPlugin = require("terser-webpack-plugin");
-const CleanWebpackPlugin = require("clean-webpack-plugin");
 module.exports = {
   entry: "./src/index.js",
   output: {
@@ -18,7 +15,8 @@ module.exports = {
       "@styles": path.resolve(__dirname, "src/styles"),
     },
   },
-  mode: "production",
+
+  mode: "development",
   module: {
     rules: [
       {
@@ -48,10 +46,12 @@ module.exports = {
     new MiniCSSExtractPlugin({
       filename: "[name].css",
     }),
-    new CleanWebpackPlugin(),
   ],
-  optimization: {
-    minimize: true,
-    minimizer: [new CSSMinimizerPlugin(), new TerserPlugin()],
+  devServer: {
+    static: {
+      directory: path.join(__dirname, "dist"),
+    },
+    compress: true,
+    port: 3006,
   },
 };
